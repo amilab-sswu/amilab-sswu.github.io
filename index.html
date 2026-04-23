@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMI Lab — Autonomous Machine Intelligence Lab @ Sungshin Women's University</title>
+  <meta name="description" content="The Autonomous Machine Intelligence Lab (AMI Lab) at Sungshin Women's University, led by Prof. Minsu Lee. We study reinforcement learning, multi-agent systems, self-improving agents, and embodied AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FBF7F0;
+      --bg-alt: #F4EEE3;
+      --surface: #FFFFFF;
+      --ink: #1A1411;
+      --ink-soft: #4A3F39;
+      --ink-faded: #7A6B62;
+      --line: #E5DACA;
+      --line-soft: #EFE6D6;
+      --accent: #6B2737;
+      --accent-soft: #A04B5E;
+      --accent-bg: #F5E9EB;
+      --gold: #B89968;
+
+      --serif: 'Fraunces', 'Iowan Old Style', 'Palatino', Georgia, serif;
+      --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+
+      --max: 1180px;
+      --gutter: clamp(1.25rem, 4vw, 2.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+      font-feature-settings: 'ss01', 'cv11';
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+    a:hover { color: var(--accent-soft); }
+
+    img, video { max-width: 100%; height: auto; display: block; }
+
+    h1, h2, h3, h4 {
+      font-family: var(--serif);
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin: 0 0 0.5em;
+      line-height: 1.15;
+    }
+
+    p { margin: 0 0 1em; }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+
+    .container-narrow {
+      max-width: 820px;
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+    }
+
+    /* --- HEADER / NAV --- */
+    header.site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(251, 247, 240, 0.85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    header.site-header.scrolled {
+      border-bottom-color: var(--line);
+    }
+
+    nav.primary {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0.85rem var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 1.25rem;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      display: flex;
+      align-items: baseline;
+      gap: 0.45rem;
+    }
+    .logo:hover { color: var(--ink); }
+    .logo .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      transform: translateY(-2px);
+    }
+    .logo small {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 0.7rem;
+      color: var(--ink-faded);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-left: 0.4rem;
+    }
+
+    nav.primary ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 2rem;
+    }
+    nav.primary ul a {
+      color: var(--ink-soft);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      position: relative;
+      padding: 0.25rem 0;
+    }
+    nav.primary ul a:hover { color: var(--accent); }
+    nav.primary ul a::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 1px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    nav.primary ul a:hover::after { transform: scaleX(1); }
+
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--ink);
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 880px) {
+      .mobile-toggle { display: block; }
+      nav.primary ul {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: var(--bg);
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        padding: 1rem var(--gutter);
+      }
+      nav.primary ul.open { display: flex; }
+      nav.primary ul a {
+        display: block;
+        padding: 0.85rem 0;
+        border-bottom: 1px solid var(--line-soft);
+      }
+      nav.primary ul li:last-child a { border-bottom: 0; }
+    }
+
+    /* --- HERO --- */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      min-height: 92svh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      padding: 6rem 0 4rem;
+      background: linear-gradient(135deg, #14110F 0%, #2A1A1E 100%);
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.45;
+      filter: saturate(0.6) contrast(1.1);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(20,17,15,0.45) 0%, rgba(20,17,15,0.7) 70%, rgba(20,17,15,0.95) 100%),
+        radial-gradient(ellipse at 30% 50%, rgba(107,39,55,0.3) 0%, transparent 60%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      width: 100%;
+      color: #F8F2E8;
+    }
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #D4B89E;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.1s ease forwards;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 32px; height: 1px;
+      background: #D4B89E;
+    }
+    .hero-title {
+      font-size: clamp(2.25rem, 6vw, 4.6rem);
+      font-weight: 300;
+      color: #F8F2E8;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+      max-width: 22ch;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.25s ease forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      font-weight: 400;
+      color: #E8C9A8;
+    }
+    .hero-subtitle {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      color: rgba(248, 242, 232, 0.78);
+      max-width: 36ch;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s ease forwards;
+    }
+    .hero-meta {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      color: rgba(248, 242, 232, 0.55);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.55s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- SECTIONS --- */
+    section.block {
+      padding: 7rem 0 5rem;
+      scroll-margin-top: 60px;
+    }
+    section.block.alt { background: var(--bg-alt); }
+    @media (max-width: 720px) {
+      section.block { padding: 5rem 0 3.5rem; }
+    }
+
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--accent);
+    }
+
+    h2.section-title {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      margin: 0 0 0.5em;
+      max-width: 16ch;
+    }
+    .section-lead {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+      color: var(--ink-soft);
+      max-width: 50ch;
+      margin: 0 0 3.5rem;
+      line-height: 1.5;
+    }
+
+    /* --- ABOUT --- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 880px) {
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    }
+    .about-text p {
+      font-size: 1.075rem;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      margin-bottom: 1.25rem;
+    }
+    .about-text p:first-of-type::first-letter {
+      font-family: var(--serif);
+      font-size: 3.4em;
+      font-weight: 400;
+      float: left;
+      line-height: 0.85;
+      padding: 0.1em 0.12em 0 0;
+      color: var(--accent);
+    }
+    .about-areas {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .about-areas li {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      letter-spacing: 0.02em;
+    }
+
+    .news-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 2rem 2rem 1.5rem;
+      border-radius: 4px;
+      position: relative;
+    }
+    .news-card h3 {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .news-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 460px;
+      overflow-y: auto;
+    }
+    .news-list li {
+      padding: 0.95rem 0;
+      border-bottom: 1px dashed var(--line-soft);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+    .news-list li:last-child { border-bottom: 0; }
+    .news-list .date {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+    .news-list .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 0.1rem 0.45rem;
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-radius: 3px;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    .news-list .body { color: var(--ink-soft); }
+    .news-list .meta {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--ink-faded);
+      font-style: italic;
+      margin-top: 0.2rem;
+    }
+
+    /* --- RESEARCH --- */
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2.5rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 880px) {
+      .research-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    .research-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .research-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px -20px rgba(26, 20, 17, 0.18);
+    }
+    .research-card .img-wrap {
+      background: #FAF6EE;
+      padding: 1rem;
+      border-bottom: 1px solid var(--line);
+      aspect-ratio: 16 / 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .research-card .img-wrap img {
+      max-height: 100%;
+      width: auto;
+      object-fit: contain;
+    }
+    .research-card .body {
+      padding: 1.75rem 1.85rem 2rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .research-card .num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .research-card h3 {
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin: 0 0 0.5rem;
+    }
+    .research-card .short {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--ink-soft);
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .research-card .desc {
+      font-size: 0.94rem;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      margin-bottom: 1.25rem;
+    }
+    .research-card .keywords {
+      list-style: none;
+      padding: 0;
+      margin: auto 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+    .research-card .keywords li {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-faded);
+      padding: 0.2rem 0.55rem;
+      background: var(--bg-alt);
+      border-radius: 3px;
+      letter-spacing: 0.02em;
+    }
+
+    /* --- PUBLICATIONS --- */
+    .pubs-toolbar {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+    .pub-filter {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.45rem 0.95rem;
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--ink-soft);
+      cursor: pointer;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .pub-filter:hover { border-color: var(--accent-soft); color: var(--accent); }
+    .pub-filter.active {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+
+    .featured-pubs {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 2rem 2.25rem;
+      margin-bottom: 3rem;
+    }
+    .featured-pubs h3 {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+      font-weight: 500;
+    }
+
+    .pub-list { list-style: none; padding: 0; margin: 0; }
+    .pub-item {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .pub-item:last-child { border-bottom: 0; }
+    .pub-title {
+      font-family: var(--serif);
+      font-size: 1.13rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--ink);
+      margin: 0 0 0.4rem;
+    }
+    .pub-title a { color: inherit; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+    .pub-title a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+    .pub-authors {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.3rem;
+    }
+    .pub-authors strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .pub-venue {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 0.93rem;
+      color: var(--ink-soft);
+    }
+    .pub-venue .year {
+      font-family: var(--mono);
+      font-style: normal;
+      font-weight: 500;
+      color: var(--accent);
+      margin-right: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .pub-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 0.55rem;
+    }
+    .pub-meta .badge {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      padding: 0.15rem 0.55rem;
+      background: var(--bg-alt);
+      color: var(--ink-soft);
+      border-radius: 3px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .pub-meta .badge.featured {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .pub-meta .badge.intl { background: #1F3A4A; color: #E8F0F4; }
+    .pub-meta .badge.dom { background: #3F3424; color: #F0E8D8; }
+    .pub-meta .badge.patent { background: #4A2A2A; color: #F4E8E8; }
+
+    .year-group { margin-bottom: 3rem; }
+    .year-heading {
+      font-family: var(--mono);
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin: 0 0 1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+      min-width: 140px;
+    }
+
+    /* --- PEOPLE --- */
+    .pi-card {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 3rem;
+      align-items: start;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 2.5rem;
+      margin-bottom: 4rem;
+    }
+    @media (max-width: 720px) {
+      .pi-card { grid-template-columns: 1fr; gap: 1.75rem; padding: 1.75rem; }
+    }
+    .pi-photo {
+      border-radius: 4px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1.15;
+      background: var(--bg-alt);
+    }
+    .pi-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .pi-info .role {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .pi-info h3 {
+      font-size: 1.85rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .pi-info h3 .ko {
+      font-size: 0.7em;
+      color: var(--ink-faded);
+      font-weight: 300;
+      margin-left: 0.5rem;
+    }
+    .pi-affil {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    .pi-bio { color: var(--ink-soft); line-height: 1.7; margin-bottom: 1.25rem; font-size: 0.97rem; }
+    .pi-interests {
+      font-family: var(--serif);
+      font-style: italic;
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+    .pi-contact {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+    }
+    .pi-contact a { color: var(--accent); }
+
+    .member-group { margin-bottom: 2.5rem; }
+    .group-heading {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .member-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem 2rem;
+    }
+    @media (max-width: 720px) { .member-list { grid-template-columns: 1fr; } }
+    .member-list li {
+      padding: 0.85rem 0;
+      border-bottom: 1px dashed var(--line-soft);
+    }
+    .member-name {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+    .member-name .ko {
+      font-size: 0.85em;
+      color: var(--ink-faded);
+      font-weight: 300;
+      margin-left: 0.35rem;
+    }
+    .member-interests {
+      font-size: 0.84rem;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    /* --- TEACHING --- */
+    .teach-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .teach-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      padding: 1.4rem 1.5rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .teach-card .term {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+    .teach-card .name {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    /* --- FUNDED RESEARCH --- */
+    .funding-list { list-style: none; padding: 0; margin: 0; }
+    .funding-item {
+      display: grid;
+      grid-template-columns: 200px 1fr auto;
+      gap: 2rem;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid var(--line-soft);
+      align-items: start;
+    }
+    @media (max-width: 720px) {
+      .funding-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    }
+    .funding-item:last-child { border-bottom: 0; }
+    .funding-period {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      letter-spacing: 0.02em;
+    }
+    .funding-title {
+      font-family: var(--serif);
+      font-size: 1.02rem;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+    .funding-meta {
+      font-size: 0.82rem;
+      color: var(--ink-faded);
+      margin-top: 0.25rem;
+    }
+    .funding-status {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      align-self: start;
+    }
+    .funding-status.ongoing { background: #E5F1E8; color: #2A5C3A; }
+    .funding-status.completed { background: var(--bg-alt); color: var(--ink-faded); }
+
+    /* --- JOIN US --- */
+    .join-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 880px) {
+      .join-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+    .join-text p {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+    .join-text ul {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+    .join-text ul li {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      padding: 0.45rem 0.85rem;
+      background: var(--bg-alt);
+      border-radius: 3px;
+      color: var(--ink-soft);
+    }
+    .contact-card {
+      background: #14110F;
+      color: #E8DFD2;
+      padding: 2.25rem;
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 120px; height: 120px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 65%);
+      opacity: 0.4;
+    }
+    .contact-card h3 {
+      color: #F8F2E8;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(232, 223, 210, 0.15);
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+    .contact-card .lab-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: #F8F2E8;
+      margin-bottom: 0.4rem;
+    }
+    .contact-card .dept {
+      font-size: 0.92rem;
+      color: rgba(232, 223, 210, 0.7);
+      margin-bottom: 1.5rem;
+    }
+    .contact-card .addr {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: rgba(232, 223, 210, 0.85);
+      margin-bottom: 1.5rem;
+    }
+    .contact-card .email {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: #E8C9A8;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(232, 223, 210, 0.15);
+      display: block;
+    }
+    .contact-card .email a { color: #E8C9A8; }
+
+    /* --- FOOTER --- */
+    footer {
+      background: #14110F;
+      color: rgba(232, 223, 210, 0.6);
+      padding: 3rem 0 2rem;
+      font-size: 0.82rem;
+    }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer .logo {
+      color: #F8F2E8;
+      font-family: var(--serif);
+      font-size: 1.1rem;
+    }
+    footer .logo small { color: rgba(232, 223, 210, 0.5); }
+    footer .copy { font-family: var(--mono); }
+
+    /* --- ANIMATIONS --- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Scrollbar minimal */
+    .news-list::-webkit-scrollbar { width: 6px; }
+    .news-list::-webkit-scrollbar-track { background: transparent; }
+    .news-list::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+    .news-list::-webkit-scrollbar-thumb:hover { background: var(--ink-faded); }
+  </style>
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="siteHeader">
+    <nav class="primary">
+      <a href="#top" class="logo">
+        <span class="dot"></span>AMI Lab<small>Sungshin</small>
+      </a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
+      <ul id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#people">People</a></li>
+        <li><a href="#teaching">Teaching</a></li>
+        <li><a href="#join">Join Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="assets/video/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Autonomous Machine Intelligence Lab</p>
+      <h1 class="hero-title">
+        Building autonomous intelligence that <em>learns,</em> <em>collaborates,</em> and <em>acts.</em>
+      </h1>
+      <p class="hero-subtitle">Toward self-improving, collaborative, and embodied AI.</p>
+      <p class="hero-meta">School of AI Convergence · Sungshin Women's University</p>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="block" id="about">
+    <div class="container">
+      <p class="eyebrow">About the Lab</p>
+      <h2 class="section-title">An autonomous, collaborative, embodied intelligence.</h2>
+
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>AMI Lab studies autonomous machine intelligence with a focus on reinforcement learning, multi-agent systems, self-improving agents, and embodied AI. We aim to build intelligent systems that can learn efficiently from experience, collaborate with others, recognize their own uncertainty, actively seek information, and act meaningfully in the physical world.</p>
+          <p>Our work spans the foundations of decision-making and the integration of foundation models — LLMs, VLMs, and VLAs — into agents that can reason, communicate, and operate across real-world environments. We collaborate with partners across academia and industry, and welcome motivated students who want to engage with research from first principles.</p>
+          <ul class="about-areas">
+            <li>Reinforcement Learning</li>
+            <li>Multi-Agent Systems</li>
+            <li>Self-improving Agents</li>
+            <li>Embodied AI</li>
+          </ul>
+        </div>
+
+        <aside class="news-card reveal">
+          <h3>Recent News</h3>
+          <ul class="news-list">
+            <li>
+              <span class="date">2026.03</span>
+              <span class="tag">Welcome</span>
+              <span class="body">Hanbi Choi and Seyeon Jung joined as Master's students.</span>
+            </li>
+            <li>
+              <span class="date">2026.01</span>
+              <span class="tag">Welcome</span>
+              <span class="body">Seyeon Jung, Suyeon Kim, Dain Im, Nayoung Kim, and Sewon Jung joined as undergraduate interns.</span>
+            </li>
+            <li>
+              <span class="date">2025.12</span>
+              <span class="tag">Award</span>
+              <span class="body">Best Paper Award (AI Theory), 2025 Korea Software Congress — "Recency-Biased Sampling for Up-to-Date Adaptation of Reinforcement Learning"</span>
+              <span class="meta">Ganghun Lee, Minji Kim, Minsu Lee, Byoung-Tak Zhang</span>
+            </li>
+            <li>
+              <span class="date">2025.09</span>
+              <span class="tag">Paper</span>
+              <span class="body">Undergraduate research published in <em>Electronics</em> (SCIE): "Fic2Bot: A Scalable Framework for Persona-driven Chatbot Generation from Fiction"</span>
+              <span class="meta">Sua Kang, Chaerim Lee, Subin Jung, Minsu Lee</span>
+            </li>
+            <li>
+              <span class="date">2025.09</span>
+              <span class="tag">Welcome</span>
+              <span class="body">Dohee Kim and Heejae Shin joined the combined B.S. & M.S. program.</span>
+            </li>
+            <li>
+              <span class="date">2025.06</span>
+              <span class="tag">Award</span>
+              <span class="body">Excellence Award (Undergraduate), KCC 2025 Junior Paper Competition — "Worldbuilding Character Chatbot via RAG and Prompting"</span>
+              <span class="meta">Sua Kang, Chaerim Lee, Subin Jung, Minsu Lee</span>
+            </li>
+            <li>
+              <span class="date">2025.06</span>
+              <span class="tag">Award</span>
+              <span class="body">Outstanding Presentation (AI Theory), KCC 2025 — "Imitation Learning with Echo State Networks for Robotic Manipulation"</span>
+              <span class="meta">Youngseok Joo, Suhyung Choi, Wooyul Jung, Minsu Lee, Byoung-Tak Zhang</span>
+            </li>
+            <li>
+              <span class="date">2025.01</span>
+              <span class="tag">Welcome</span>
+              <span class="body">Seven undergraduate interns joined the lab: Sua Kang, Chaerim Lee, Yuri Kim, Hanbi Choi, Subin Jung, Dohee Kim, Heejae Shin.</span>
+            </li>
+            <li>
+              <span class="date">2024.12</span>
+              <span class="tag">Award</span>
+              <span class="body">Best Paper Award (AI Theory), 2024 Korea Software Congress — "Training Liquid State Machine using Reward-Modulated STDP"</span>
+              <span class="meta">Youngseok Joo, Minsu Lee, Byoung-Tak Zhang</span>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESEARCH ============ -->
+  <section class="block alt" id="research">
+    <div class="container">
+      <p class="eyebrow">Research</p>
+      <h2 class="section-title">Four threads, one mission.</h2>
+      <p class="section-lead">From multi-agent collaboration to self-reflective reasoning — building agents that learn, communicate, and act with purpose.</p>
+
+      <div class="research-grid">
+
+        <article class="research-card reveal">
+          <div class="img-wrap"><img src="assets/img/research/mas.png" alt="Multi-Agent Systems diagram" loading="lazy" /></div>
+          <div class="body">
+            <span class="num">01 / Multi-Agent Systems</span>
+            <h3>Multi-Agent Systems</h3>
+            <p class="short">Collaborative, communicative, and goal-driven intelligence for multi-agent systems.</p>
+            <p class="desc">We investigate autonomous collaboration, communication, and planning in multi-agent systems powered by LLMs, VLMs, and VLAs. Our research aims to develop agents that can coordinate effectively, share knowledge, divide roles, and solve complex tasks through cooperative reasoning. We are particularly interested in scalable and decentralized multi-agent intelligence for real-world environments.</p>
+            <ul class="keywords">
+              <li>multi-agent collaboration</li>
+              <li>communication</li>
+              <li>planning</li>
+              <li>decentralized intelligence</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="research-card reveal">
+          <div class="img-wrap"><img src="assets/img/research/rl.png" alt="Reinforcement Learning diagram" loading="lazy" /></div>
+          <div class="body">
+            <span class="num">02 / Reinforcement Learning</span>
+            <h3>Reinforcement Learning</h3>
+            <p class="short">Data-efficient and adaptive learning for autonomous agents.</p>
+            <p class="desc">We study RL theories and algorithms for efficient, robust, and autonomous behavior learning. Our focus areas include automated reward engineering, long-horizon decision-making, policy optimization, and real-world adaptation. We also explore RL combined with large foundation models — LLMs, VLMs, and VLAs — to enable more capable and generalizable agents.</p>
+            <ul class="keywords">
+              <li>reward learning</li>
+              <li>long-horizon planning</li>
+              <li>policy optimization</li>
+              <li>foundation models</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="research-card reveal">
+          <div class="img-wrap"><img src="assets/img/research/lba.png" alt="Self-improving Agents diagram" loading="lazy" /></div>
+          <div class="body">
+            <span class="num">03 / Self-improving Agents</span>
+            <h3>Self-improving Agents</h3>
+            <p class="short">Agents that improve themselves by recognizing uncertainty and asking questions.</p>
+            <p class="desc">We study agents that identify their own uncertainty, reflect on their knowledge gaps, and actively seek additional information through questioning, exploration, or external feedback. Inspired by learning-by-asking and self-reflective intelligence, our goal is agents that continuously improve their reasoning, decision-making, and adaptability in dynamic environments.</p>
+            <ul class="keywords">
+              <li>learning-by-asking</li>
+              <li>uncertainty awareness</li>
+              <li>self-reflection</li>
+              <li>LLM / VLM</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="research-card reveal">
+          <div class="img-wrap"><img src="assets/img/research/embodied-ai.png" alt="Embodied AI diagram" loading="lazy" /></div>
+          <div class="body">
+            <span class="num">04 / Embodied AI</span>
+            <h3>Embodied AI</h3>
+            <p class="short">Agents that perceive, reason, and act in the physical world.</p>
+            <p class="desc">We explore embodied intelligence by integrating multimodal perception, affordance grounding, decision-making, and robotic action in real-world environments. Our research addresses how agents can understand their surroundings, connect language and vision to actionable knowledge, and perform meaningful tasks through physical interaction.</p>
+            <ul class="keywords">
+              <li>robot learning</li>
+              <li>multimodal perception</li>
+              <li>affordance</li>
+              <li>multimodal grounding</li>
+            </ul>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PUBLICATIONS ============ -->
+  <section class="block" id="publications">
+    <div class="container">
+      <p class="eyebrow">Publications</p>
+      <h2 class="section-title">Selected research output.</h2>
+      <p class="section-lead">A complete list of the lab's recent publications, grouped by year. Featured work appears at the top.</p>
+
+      <!-- Featured -->
+      <div class="featured-pubs reveal">
+        <h3>★ Featured Publications</h3>
+        <ul class="pub-list">
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/11007841" target="_blank" rel="noopener">One-Shot 3-D Affordance Learning for Multi-Stage Robotic Manipulation</a></div>
+            <div class="pub-authors">Hyunseo Kim, Yeon-Ji Song, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><span class="year">2026</span><em>IEEE Access</em></div>
+            <div class="pub-meta"><span class="badge featured">Featured</span><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/11024053" target="_blank" rel="noopener">Climb with SHERPA: Heuristic-Guided Reinforcement Learning via Segmented Experience Relay</a></div>
+            <div class="pub-authors">Minji Kim, Ganghun Lee, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><span class="year">2026</span><em>IEEE Robotics and Automation Letters</em></div>
+            <div class="pub-meta"><span class="badge featured">Featured</span><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/10823732" target="_blank" rel="noopener">From Sparse to Dense: Toddler-inspired Reward Transition in Goal-Oriented Reinforcement Learning</a></div>
+            <div class="pub-authors">Junseok Park, Hyeonseo Yang, Min Whoo Lee, Won-Seok Choi, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><span class="year">2025</span><em>IEEE Transactions on Cognitive and Developmental Systems</em></div>
+            <div class="pub-meta"><span class="badge featured">Featured</span><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://www.mdpi.com/2079-9292/14/19/3859" target="_blank" rel="noopener">Fic2Bot: A Scalable Framework for Persona-Driven Chatbot Generation from Fiction</a></div>
+            <div class="pub-authors">Sua Kang, Chaerim Lee, Subin Jung, <strong>Minsu Lee</strong></div>
+            <div class="pub-venue"><span class="year">2025</span><em>Electronics</em></div>
+            <div class="pub-meta"><span class="badge featured">Featured</span><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://www.sciencedirect.com/science/article/pii/S0950705125008800" target="_blank" rel="noopener">INQUIRER: Harnessing Internal Knowledge Graphs for Video Question Generation</a></div>
+            <div class="pub-authors">Woo Suk Choi, Youwon Jang, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><span class="year">2025</span><em>Knowledge-Based Systems</em></div>
+            <div class="pub-meta"><span class="badge featured">Featured</span><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ojs.aaai.org/index.php/AAAI/article/view/34582" target="_blank" rel="noopener">Truncated Gaussian Policy for Debiased Continuous Control</a></div>
+            <div class="pub-authors">Ganghun Lee, Minji Kim, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><span class="year">2025</span><em>AAAI 2025</em></div>
+            <div class="pub-meta"><span class="badge featured">Featured</span><span class="badge intl">Int'l Conference</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- All by year -->
+      <div class="year-group reveal">
+        <h3 class="year-heading">2026</h3>
+        <ul class="pub-list">
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/11007841" target="_blank" rel="noopener">One-Shot 3-D Affordance Learning for Multi-Stage Robotic Manipulation</a></div>
+            <div class="pub-authors">Hyunseo Kim, Yeon-Ji Song, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>IEEE Access</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/11024053" target="_blank" rel="noopener">Climb with SHERPA: Heuristic-Guided Reinforcement Learning via Segmented Experience Relay</a></div>
+            <div class="pub-authors">Minji Kim, Ganghun Lee, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>IEEE Robotics and Automation Letters</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://openreview.net/forum?id=1Q3jV6vQ6C" target="_blank" rel="noopener">Communicating Unexpectedness for Out-of-Distribution Multi-Agent Reinforcement Learning</a></div>
+            <div class="pub-authors">Min Whoo Lee, Yunsu Lee, Kibeom Kim, Soo Wung Shin, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>IEEE Access</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://openaccess.thecvf.com/content/WACV2026/html/Choi_Hybrid_State_Representation_for_Video_Procedure_Planning_WACV_2026_paper.html" target="_blank" rel="noopener">Hybrid State Representation for Video Procedure Planning</a></div>
+            <div class="pub-authors">Woo Suk Choi, Youwon Jang, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>WACV 2026</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">The Impact of Likert Scale Design on Judgment Reliability in Korean and English LLM-as-a-Judge</div>
+            <div class="pub-authors">Youwon Jang, Woo Suk Choi, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>KIISE Transactions on Computing Practices</em> (정보과학회 컴퓨팅의 실제 논문지)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Training Liquid State Machine using Reward-Modulated Spike-Timing-Dependent Plasticity</div>
+            <div class="pub-authors">Youngseok Joo, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Journal of KIISE</em> (정보과학회 논문지)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Journal</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="year-group reveal">
+        <h3 class="year-heading">2025</h3>
+        <ul class="pub-list">
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/10823732" target="_blank" rel="noopener">From Sparse to Dense: Toddler-inspired Reward Transition in Goal-Oriented Reinforcement Learning</a></div>
+            <div class="pub-authors">Junseok Park, Hyeonseo Yang, Min Whoo Lee, Won-Seok Choi, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>IEEE Transactions on Cognitive and Developmental Systems</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://aclanthology.org/2025.emnlp-main.56/" target="_blank" rel="noopener">Confidence-guided Refinement Reasoning for Zero-shot Question Answering</a></div>
+            <div class="pub-authors">Youwon Jang, Woo Suk Choi, Minjoon Jung, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>EMNLP 2025</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ojs.aaai.org/index.php/AAAI/article/view/34582" target="_blank" rel="noopener">Truncated Gaussian Policy for Debiased Continuous Control</a></div>
+            <div class="pub-authors">Ganghun Lee, Minji Kim, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>AAAI 2025</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://www.mdpi.com/2079-9292/14/19/3859" target="_blank" rel="noopener">Fic2Bot: A Scalable Framework for Persona-Driven Chatbot Generation from Fiction</a></div>
+            <div class="pub-authors">Sua Kang, Chaerim Lee, Subin Jung, <strong>Minsu Lee</strong></div>
+            <div class="pub-venue"><em>Electronics</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://www.sciencedirect.com/science/article/pii/S0950705125008800" target="_blank" rel="noopener">INQUIRER: Harnessing Internal Knowledge Graphs for Video Question Generation</a></div>
+            <div class="pub-authors">Woo Suk Choi, Youwon Jang, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Knowledge-Based Systems</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">CraftGround: A Flexible Reinforcement Learning Environment Based on the Latest Minecraft</div>
+            <div class="pub-authors">Hyeonseo Yang, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Journal of KIISE</em> (정보과학회 논문지)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Multimodal Generative Framework for Korean-style Adaptation of Foreign Fairytales</div>
+            <div class="pub-authors">Hanbi Choi, Dohee Kim, Yuri Kim, Heejae Shin, <strong>Minsu Lee</strong></div>
+            <div class="pub-venue"><em>Korea Computer Congress 2025</em> (한국컴퓨터종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Worldbuilding Character Chatbot via RAG and Prompt Engineering</div>
+            <div class="pub-authors">Sua Kang, Chaerim Lee, Subin Jung, <strong>Minsu Lee</strong></div>
+            <div class="pub-venue"><em>Korea Computer Congress 2025</em> (한국컴퓨터종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Imitation Learning with Echo State Networks for Robotic Manipulation</div>
+            <div class="pub-authors">Youngseok Joo, Suhyung Choi, Wooyul Jung, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Korea Computer Congress 2025</em> (한국컴퓨터종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Comparison of SDV Autonomous Driving Simulation Virtual Validation Performance through Cloud-based PPO Learning</div>
+            <div class="pub-authors">Jeonga Choi, <strong>Minsu Lee</strong>, Jonggu Kang</div>
+            <div class="pub-venue"><em>Korea Computer Congress 2025</em> (한국컴퓨터종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Recency-Biased Sampling for Up-to-Date Adaptation of Reinforcement Learning</div>
+            <div class="pub-authors">Ganghun Lee, Minji Kim, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Korea Software Congress 2025</em> (한국소프트웨어종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Heuristic Action Cycle Reinforcement Learning</div>
+            <div class="pub-authors">Minji Kim, Ganghun Lee, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Korea Software Congress 2025</em> (한국소프트웨어종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Implementation of a Liquid State Machine Framework for Robotic Imitation Learning</div>
+            <div class="pub-authors">Youngseok Joo, Wooyul Jung, Suhyung Choi, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Korea Software Congress 2025</em> (한국소프트웨어종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="year-group reveal">
+        <h3 class="year-heading">2024</h3>
+        <ul class="pub-list">
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ieeexplore.ieee.org/document/10561571" target="_blank" rel="noopener">Visual Hindsight Self-Imitation Learning for Interactive Navigation</a></div>
+            <div class="pub-authors">Kibeom Kim, Kisung Shin, Min Whoo Lee, Moonhoen Lee, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>IEEE Access</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Journal</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://ojs.aaai.org/index.php/AAAI/article/view/27819" target="_blank" rel="noopener">Unveiling the Significance of Toddler-Inspired Reward Transition in Goal-Oriented Reinforcement Learning</a></div>
+            <div class="pub-authors">Junseok Park, Yoonsung Kim, Hee Bin Yoo, Min Whoo Lee, Kibeom Kim, Won-Seok Choi, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>AAAI 2024</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">CogME: A Cognition-Inspired Multi-Dimensional Evaluation Metric for Story Understanding</div>
+            <div class="pub-authors">Minjung Shin, Seongho Choi, Yu-Jung Heo, <strong>Minsu Lee</strong>, Byoung-Tak Zhang, Jeh-Kwang Ryu</div>
+            <div class="pub-venue"><em>CogSci 2024</em></div>
+            <div class="pub-meta"><span class="badge intl">Int'l Conference</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title">Training Liquid State Machine using Reward-Modulated Spike-Timing-Dependent Plasticity</div>
+            <div class="pub-authors">Youngseok Joo, <strong>Minsu Lee</strong>, Byoung-Tak Zhang</div>
+            <div class="pub-venue"><em>Korea Software Congress 2024</em> (한국소프트웨어종합학술대회)</div>
+            <div class="pub-meta"><span class="badge dom">Domestic Conference</span></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="year-group reveal">
+        <h3 class="year-heading">Patents</h3>
+        <ul class="pub-list">
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://patents.justia.com/patent/12583103" target="_blank" rel="noopener">Robot arm control device, method for training hierarchical reinforcement learning model for robot arm control, and storage medium storing instructions to perform method</a></div>
+            <div class="pub-authors">Ganghun Lee, Byoung-Tak Zhang, Minji Kim, <strong>Minsu Lee</strong></div>
+            <div class="pub-venue"><span class="year">2026</span><em>US Patent 12,583,103</em></div>
+            <div class="pub-meta"><span class="badge patent">Patent</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://patents.justia.com/patent/12505659" target="_blank" rel="noopener">Computing apparatus and method for performing reinforcement learning using multimodal artificial intelligence agent</a></div>
+            <div class="pub-authors">Byoung-Tak Zhang, Hyun Seok Oh, Kwanyoung Park, Youngki Lee, <strong>Minsu Lee</strong>, Min Whoo Lee, Ganghun Lee, Junseok Park</div>
+            <div class="pub-venue"><span class="year">2025</span><em>US Patent 12,505,659</em></div>
+            <div class="pub-meta"><span class="badge patent">Patent</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://patents.justia.com/patent/12223695" target="_blank" rel="noopener">Target-oriented reinforcement learning method and apparatus for performing the same</a></div>
+            <div class="pub-authors">Byoung-Tak Zhang, Kibeom Kim, <strong>Minsu Lee</strong>, Min Whoo Lee, Yoonsung Kim</div>
+            <div class="pub-venue"><span class="year">2025</span><em>US Patent 12,223,695</em></div>
+            <div class="pub-meta"><span class="badge patent">Patent</span></div>
+          </li>
+          <li class="pub-item">
+            <div class="pub-title"><a href="https://patents.justia.com/patent/12050632" target="_blank" rel="noopener">Question answering apparatus and method</a></div>
+            <div class="pub-authors">Byoung-Tak Zhang, Seongho Choi, Kyoung-Woon On, Yu-Jung Heo, Youwon Jang, Ahjeong Seo, <strong>Minsu Lee</strong></div>
+            <div class="pub-venue"><span class="year">2024</span><em>US Patent 12,050,632</em></div>
+            <div class="pub-meta"><span class="badge patent">Patent</span></div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ PEOPLE ============ -->
+  <section class="block alt" id="people">
+    <div class="container">
+      <p class="eyebrow">People</p>
+      <h2 class="section-title">The team behind the work.</h2>
+
+      <!-- PI -->
+      <div class="pi-card reveal">
+        <div class="pi-photo">
+          <img src="assets/img/mslee.jpg" alt="Prof. Minsu Lee" />
+        </div>
+        <div class="pi-info">
+          <p class="role">Principal Investigator</p>
+          <h3>Minsu Lee <span class="ko">이민수</span></h3>
+          <p class="pi-affil">Professor · School of AI Convergence, Sungshin Women's University</p>
+          <p class="pi-bio">Prof. Lee leads the Autonomous Machine Intelligence (AMI) Lab. Her research advances autonomous, collaborative, and embodied intelligence — from foundational reinforcement learning to multi-agent systems and self-improving agents grounded in foundation models.</p>
+          <p class="pi-interests">Self-improving AI · Reinforcement Learning · Multi-Agent Collaboration & Communication · Multimodal Intelligence · Embodied Intelligence · Autonomous Machine Intelligence</p>
+          <p class="pi-contact">mslee <span style="color:var(--ink-faded)">at</span> sungshin <span style="color:var(--ink-faded)">dot</span> ac <span style="color:var(--ink-faded)">dot</span> kr</p>
+        </div>
+      </div>
+
+      <!-- Master Course Students -->
+      <div class="member-group reveal">
+        <h3 class="group-heading">Master's Course Students</h3>
+        <ul class="member-list">
+          <li>
+            <div class="member-name">Hanbi Choi <span class="ko">최한비</span></div>
+            <div class="member-interests">Multi-Agent Collaboration · VLM-based Transfer Learning</div>
+          </li>
+          <li>
+            <div class="member-name">Seyeon Jung <span class="ko">정세연</span></div>
+            <div class="member-interests">Multi-Agent Communication · LLM-based Multi-Agentic Systems</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Combined B.S. & M.S. -->
+      <div class="member-group reveal">
+        <h3 class="group-heading">Combined B.S. & M.S. Course Students</h3>
+        <ul class="member-list">
+          <li>
+            <div class="member-name">Heejae Shin <span class="ko">신희재</span></div>
+            <div class="member-interests">Multi-Agent Collaboration · Culture-aware Text Style Transfer</div>
+          </li>
+          <li>
+            <div class="member-name">Dohee Kim <span class="ko">김도희</span></div>
+            <div class="member-interests">Emergent Tool Generation for Embodied Agents · VLM-based Transfer Learning · Culture-aware Image Style Transfer</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Undergraduate Interns -->
+      <div class="member-group reveal">
+        <h3 class="group-heading">Undergraduate Interns</h3>
+        <ul class="member-list">
+          <li>
+            <div class="member-name">Subin Jung <span class="ko">정수빈</span></div>
+            <div class="member-interests">Emergent Tool Generation for Embodied Agents · Persona-driven Chatbot Systems · LLM-based Agentic Systems</div>
+          </li>
+          <li>
+            <div class="member-name">Suyeon Kim <span class="ko">김수연</span></div>
+            <div class="member-interests">Multi-Agent Communication · LLM-based Agentic Systems</div>
+          </li>
+          <li>
+            <div class="member-name">Dain Im <span class="ko">임다인</span></div>
+            <div class="member-interests">Emergent Tool Generation for Embodied Agents · VLM-based Planning for Embodied Agents</div>
+          </li>
+          <li>
+            <div class="member-name">Nayoung Kim <span class="ko">김나영</span></div>
+            <div class="member-interests">Multi-Agent Communication · LLM-based Agentic Systems</div>
+          </li>
+          <li>
+            <div class="member-name">Sewon Jung <span class="ko">정세원</span></div>
+            <div class="member-interests">Multi-Agent Collaboration · VLM-based Agentic Planning</div>
+          </li>
+          <li>
+            <div class="member-name">Sua Kang <span class="ko">강수아</span></div>
+            <div class="member-interests">Persona-driven Chatbot System · LLM-based Agentic Systems</div>
+          </li>
+          <li>
+            <div class="member-name">Yuri Kim <span class="ko">김유리</span></div>
+            <div class="member-interests">Culture-aware Text Style Transfer · LLM-based Agentic Systems</div>
+          </li>
+          <li>
+            <div class="member-name">Chaerim Lee <span class="ko">이채림</span></div>
+            <div class="member-interests">Persona-driven Chatbot System · LLM-based Agentic Systems</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ TEACHING ============ -->
+  <section class="block" id="teaching">
+    <div class="container">
+      <p class="eyebrow">Teaching</p>
+      <h2 class="section-title">Courses taught.</h2>
+      <p class="section-lead">Prof. Lee teaches across the AI Convergence curriculum — from foundational programming to graduate-level service design.</p>
+
+      <div style="margin-bottom: 2.5rem;">
+        <h3 style="font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">2026 · Spring</h3>
+        <div class="teach-grid">
+          <div class="teach-card"><div class="term">Spring 2026</div><div class="name">AI Service Design</div></div>
+          <div class="teach-card"><div class="term">Spring 2026</div><div class="name">Python Programming</div></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 2.5rem;">
+        <h3 style="font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">2025</h3>
+        <div class="teach-grid">
+          <div class="teach-card"><div class="term">Fall 2025</div><div class="name">Machine Learning</div></div>
+          <div class="teach-card"><div class="term">Fall 2025</div><div class="name">Data Structures and Programming Practice</div></div>
+          <div class="teach-card"><div class="term">Spring 2025</div><div class="name">AI Service Design</div></div>
+          <div class="teach-card"><div class="term">Spring 2025</div><div class="name">Python Programming</div></div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;">2024</h3>
+        <div class="teach-grid">
+          <div class="teach-card"><div class="term">Fall 2024</div><div class="name">Data Structures and Programming Practice</div></div>
+          <div class="teach-card"><div class="term">Fall 2024</div><div class="name">Digital Logic Circuit</div></div>
+          <div class="teach-card"><div class="term">Fall 2024</div><div class="name">AI & Design</div></div>
+        </div>
+      </div>
+
+      <!-- Funded Research -->
+      <div style="margin-top: 5rem;">
+        <p class="eyebrow">Funded Research</p>
+        <h2 class="section-title" style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 2rem;">Active and recent grants.</h2>
+        <ul class="funding-list">
+          <li class="funding-item">
+            <div class="funding-period">May 2024 – Apr 2027</div>
+            <div>
+              <div class="funding-title">Bio-inspired Autonomous Reinforcement Learning for Real-World Applications</div>
+              <div class="funding-meta">Principal Investigator · NRF · Ministry of Science and ICT</div>
+            </div>
+            <span class="funding-status ongoing">Ongoing</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Mar 2026 – Feb 2027</div>
+            <div>
+              <div class="funding-title">Automated Reward Function Generation Framework for Adaptive Reinforcement Learning</div>
+              <div class="funding-meta">Principal Investigator · Sungshin Women's University</div>
+            </div>
+            <span class="funding-status ongoing">Ongoing</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Apr 2022 – Dec 2026</div>
+            <div>
+              <div class="funding-title">Development of Uncertainty-aware Agents Learning by Asking Questions</div>
+              <div class="funding-meta">Co-Principal Investigator · IITP · Ministry of Science and ICT</div>
+            </div>
+            <span class="funding-status ongoing">Ongoing</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Mar 2025 – Feb 2026</div>
+            <div>
+              <div class="funding-title">Heuristic Intervention for Balancing Exploration and Guidance in Reinforcement Learning</div>
+              <div class="funding-meta">Principal Investigator · Sungshin Women's University</div>
+            </div>
+            <span class="funding-status completed">Completed</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Apr 2022 – Dec 2023</div>
+            <div>
+              <div class="funding-title">Self-directed AI Agents with Problem-solving Capability</div>
+              <div class="funding-meta">Leading Researcher · IITP · Ministry of Science and ICT</div>
+            </div>
+            <span class="funding-status completed">Completed</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Mar 2021 – Feb 2024</div>
+            <div>
+              <div class="funding-title">Goal-oriented Self-supervised Reinforcement Learning for Real-World Applications</div>
+              <div class="funding-meta">Principal Investigator · NRF · Ministry of Science and ICT</div>
+            </div>
+            <span class="funding-status completed">Completed</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Dec 2018 – Mar 2022</div>
+            <div>
+              <div class="funding-title">Imitation Learning from Human Demonstration in VR Environment for Physical Human-Robot Interaction (ILIAS)</div>
+              <div class="funding-meta">Co-Principal Investigator · KIAT · Ministry of Trade, Industry and Energy</div>
+            </div>
+            <span class="funding-status completed">Completed</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Jun 2018 – May 2021</div>
+            <div>
+              <div class="funding-title">Light-weight Incremental Deep Learning Techniques on Embedded Systems</div>
+              <div class="funding-meta">Principal Investigator · NRF · Ministry of Education</div>
+            </div>
+            <span class="funding-status completed">Completed</span>
+          </li>
+          <li class="funding-item">
+            <div class="funding-period">Jul 2017 – Dec 2021</div>
+            <div>
+              <div class="funding-title">QA Systems for Video Story Understanding to Pass the Video Turing Test</div>
+              <div class="funding-meta">Leading Researcher · IITP · Ministry of Science and ICT</div>
+            </div>
+            <span class="funding-status completed">Completed</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOIN US ============ -->
+  <section class="block alt" id="join">
+    <div class="container">
+      <p class="eyebrow">Join Us</p>
+      <h2 class="section-title">Curious, motivated, ready to dig in?</h2>
+
+      <div class="join-grid">
+        <div class="join-text reveal">
+          <p>We welcome motivated <strong>graduate students</strong> and <strong>undergraduate interns</strong> who are excited to tackle research challenges in AI. We're looking for people who are curious, self-motivated, and eager to engage with hard problems through hands-on experimentation and rigorous thinking.</p>
+
+          <p><strong>Graduate students</strong> should be interested in research-oriented study and academic publication. <strong>Undergraduate interns</strong> can gain hands-on experience through paper reading, implementation, and project participation.</p>
+
+          <p>Our research areas:</p>
+          <ul>
+            <li>Reinforcement Learning</li>
+            <li>Embodied AI</li>
+            <li>Multimodal Intelligence</li>
+            <li>Multi-Agent Collaboration</li>
+            <li>Vision-Language and Agentic AI</li>
+          </ul>
+
+          <p style="margin-top: 1.5rem;"><strong>To apply:</strong> please email your <strong>CV, transcript, research interests, and a short introduction</strong> to the address shown.</p>
+        </div>
+
+        <aside class="contact-card reveal">
+          <h3>Contact</h3>
+          <div class="lab-name">Autonomous Machine Intelligence Lab</div>
+          <div class="dept">School of AI Convergence<br>Sungshin Women's University</div>
+          <div class="addr">
+            Room 201-2, Sujung Hall<br>
+            2 Bomun-ro 34da-gil, Seongbuk-gu<br>
+            Seoul 02844, Republic of Korea
+          </div>
+          <a href="mailto:mslee@sungshin.ac.kr" class="email">mslee at sungshin dot ac dot kr</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container">
+      <a href="#top" class="logo">
+        <span style="display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-right:0.4rem;"></span>
+        AMI Lab<small style="font-family:var(--sans);font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;margin-left:0.5rem;">Sungshin</small>
+      </a>
+      <div class="copy">© 2026 Autonomous Machine Intelligence Lab · Sungshin Women's University</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const toggle = document.getElementById('mobileToggle');
+    const navLinks = document.getElementById('navLinks');
+    if (toggle) {
+      toggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+      navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+    }
+
+    // Sticky header shadow on scroll
+    const header = document.getElementById('siteHeader');
+    const onScroll = () => {
+      if (window.scrollY > 20) header.classList.add('scrolled');
+      else header.classList.remove('scrolled');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>
